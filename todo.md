@@ -1,31 +1,25 @@
 # TODO
 
-## Current version `2.6`
-1. Finesse Resource Pack sounds
-2. Test all preset de/materialisation
-3. TARDIS Information System
-    * add new features
-    * auto log out?
-4. Documentation & videos!
-
-## Waiting on Bukkit API
-0. IDs are soon to be history... so convert all ID use to entity names
-1. Get/set horse speed (Attribute API)
-
-## Next version `2.7-beta-1`
-1. T.I.P.S. - TARDIS Interior Positioning System
+## Current version `2.7-beta-1`
+0. Documentation & videos!
+1. Make all TARDIS recipes configurable
+    * Reload TARDIS recipes when difficulty level is changed
 2. Sonic Screwdrivers
-3. Advanced TARDIS console
+3. Add an admin `/tardisgive` command to give locators/remotes/atron energy etc
+4. Advanced TARDIS console
     * Export TARDIS saves / areas / etc. to disks for use with Advanced TARDIS console
     * Have a storage container with GUI for accessing disks
-4. Make all TARDIS recipes configurable
-    * Reload TARDIS recipes when difficulty level is changed
 5. Add command to make EP1 appear
 6. Make condensables list configurable
 7. TARDIS exterior rendering / scanner room
 8. Underground materialisation
-9. Add MySQL support
-10. Add an admin `/tardisgive` command to give locators/remotes/atron energy etc
+9. TARDIS Information System
+    * add new features
+    * auto log out?
+    
+## Waiting on Bukkit API
+0. IDs are soon to be history... so convert all ID use to entity names
+1. Get/set horse speed (Attribute API)
 
 ## Future version `2.8+`
 1. Custom room schematics in ARS (check they are 16x16x16)
