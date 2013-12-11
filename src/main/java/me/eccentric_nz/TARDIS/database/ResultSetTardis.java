@@ -45,7 +45,6 @@ public class ResultSetTardis {
     private int tardis_id;
     private String owner;
     private String chunk;
-    private int tips;
     private TARDISConstants.SCHEMATIC schematic;
     private String replaced;
     private String companions;
@@ -148,7 +147,6 @@ public class ResultSetTardis {
                     this.tardis_id = rs.getInt("tardis_id");
                     this.owner = rs.getString("owner");
                     this.chunk = rs.getString("chunk");
-                    this.tips = rs.getInt("tips");
                     this.schematic = TARDISConstants.SCHEMATIC.valueOf(rs.getString("size"));
                     this.replaced = rs.getString("replaced");
                     if (rs.wasNull()) {
@@ -220,10 +218,6 @@ public class ResultSetTardis {
 
     public String getChunk() {
         return chunk;
-    }
-
-    public int getTIPS() {
-        return tips;
     }
 
     public TARDISConstants.SCHEMATIC getSchematic() {

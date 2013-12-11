@@ -58,7 +58,6 @@ public class TARDISExterminator {
                 boolean hid = rs.isHidden();
                 String chunkLoc = rs.getChunk();
                 String owner = rs.getOwner();
-                int tips = rs.getTIPS();
                 TARDISConstants.SCHEMATIC schm = rs.getSchematic();
                 HashMap<String, Object> wherecl = new HashMap<String, Object>();
                 wherecl.put("tardis_id", id);
@@ -75,7 +74,7 @@ public class TARDISExterminator {
                 World cw = plugin.getServer().getWorld(chunkworld[0]);
                 int restore = getRestore(cw);
                 if (!cw.getName().contains("TARDIS_WORLD_")) {
-                    plugin.destroyerI.destroyInner(schm, id, cw, restore, owner, tips);
+                    plugin.destroyerI.destroyInner(schm, id, cw, restore, owner);
                 }
                 cleanDatabase(id);
                 cleanWorlds(cw, owner);
@@ -140,7 +139,6 @@ public class TARDISExterminator {
         if (rs.resultSet()) {
             int id = rs.getTardis_id();
             String chunkLoc = rs.getChunk();
-            int tips = rs.getTIPS();
             TARDISConstants.SCHEMATIC schm = rs.getSchematic();
             // need to check that a player is not currently in the TARDIS
             if (player.hasPermission("tardis.delete")) {
@@ -192,7 +190,7 @@ public class TARDISExterminator {
                 World cw = plugin.getServer().getWorld(chunkworld[0]);
                 int restore = getRestore(cw);
                 if (!cw.getName().contains("TARDIS_WORLD_")) {
-                    plugin.destroyerI.destroyInner(schm, id, cw, restore, playerNameStr, tips);
+                    plugin.destroyerI.destroyInner(schm, id, cw, restore, playerNameStr);
                 }
                 cleanDatabase(id);
                 cleanWorlds(cw, playerNameStr);
