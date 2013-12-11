@@ -7,7 +7,7 @@ softdepend: [Multiverse-Core,Multiverse-Adventure,Multiverse-Inventories,MultiWo
 website: http://dev.bukkit.org/bukkit-plugins/tardis/
 dev-url: http://dev.bukkit.org/bukkit-plugins/tardis/
 url: http://eccentricdevotion.github.io/TARDIS/
-version: maven-version-number
+version: 2.6.1
 permissions:
   tardis.admin:
     description: Allow players access to the TARDIS admin commands.
@@ -330,12 +330,6 @@ commands:
     aliases: tadmin
     description: Set TARDIS configuration options.
     usage: /<command> [config option] [value]
-    permission: tardis.admin
-    permission-message: You don't have the permission <permission> to use this command
-  tardisgive:
-    aliases: [tgive]
-    description: Give TARDIS items to a player.
-    usage: /<command> [player] [item] [amount]
     permission: tardis.admin
     permission-message: You don't have the permission <permission> to use this command
   tardisroom:
