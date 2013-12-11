@@ -1,11 +1,8 @@
 # TODO
 
 ## Current version `2.7-beta-1`
-0. Documentation & videos!
-1. Make all TARDIS recipes configurable
-    * Reload TARDIS recipes when difficulty level is changed
+1. Documentation & videos!
 2. Sonic Screwdrivers
-3. Add an admin `/tardisgive` command to give locators/remotes/atron energy etc
 4. Advanced TARDIS console
     * Export TARDIS saves / areas / etc. to disks for use with Advanced TARDIS console
     * Have a storage container with GUI for accessing disks

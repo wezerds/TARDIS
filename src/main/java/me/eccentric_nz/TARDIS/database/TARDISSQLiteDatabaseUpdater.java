@@ -31,7 +31,7 @@ import org.bukkit.ChatColor;
  *
  * @author eccentric_nz
  */
-public class TARDISDatabaseUpdater {
+public class TARDISSQLiteDatabaseUpdater {
 
     private final List<String> areaupdates = new ArrayList<String>();
     private final List<String> blockupdates = new ArrayList<String>();
@@ -42,8 +42,10 @@ public class TARDISDatabaseUpdater {
     private final List<String> tardisupdates = new ArrayList<String>();
     private final long now = System.currentTimeMillis();
     private final Statement statement;
+    private final TARDIS plugin;
 
-    public TARDISDatabaseUpdater(Statement statement) {
+    public TARDISSQLiteDatabaseUpdater(TARDIS plugin, Statement statement) {
+        this.plugin = plugin;
         this.statement = statement;
         areaupdates.add("y INTEGER");
         blockupdates.add("police_box INTEGER DEFAULT 0");
@@ -91,6 +93,7 @@ public class TARDISDatabaseUpdater {
         tardisupdates.add("scanner TEXT DEFAULT ''");
         tardisupdates.add("stable TEXT DEFAULT ''");
         tardisupdates.add("tardis_init INTEGER DEFAULT 0");
+        tardisupdates.add("tips INTEGER DEFAULT '-1'");
         tardisupdates.add("village TEXT DEFAULT ''");
     }
 
@@ -173,10 +176,10 @@ public class TARDISDatabaseUpdater {
                 }
             }
         } catch (SQLException e) {
-            TARDIS.plugin.debug("Database add fields error: " + e.getMessage() + e.getErrorCode());
+            plugin.debug("SQLite database add fields error: " + e.getMessage() + e.getErrorCode());
         }
         if (i > 0) {
-            TARDIS.plugin.console.sendMessage(TARDIS.plugin.pluginName + "Added " + ChatColor.AQUA + i + ChatColor.RESET + " fields to the database!");
+            plugin.console.sendMessage(TARDIS.plugin.pluginName + "Added " + ChatColor.AQUA + i + ChatColor.RESET + " fields to the SQLite database!");
         }
     }
 }

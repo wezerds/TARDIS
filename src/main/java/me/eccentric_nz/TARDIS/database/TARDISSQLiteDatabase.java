@@ -17,7 +17,6 @@
 package me.eccentric_nz.TARDIS.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import me.eccentric_nz.TARDIS.TARDIS;
@@ -31,23 +30,15 @@ import me.eccentric_nz.TARDIS.TARDIS;
  *
  * @author eccentric_nz
  */
-public class TARDISDatabase {
+public class TARDISSQLiteDatabase {
 
-    private static final TARDISDatabase instance = new TARDISDatabase();
+    private final TARDISDatabaseConnection service = TARDISDatabaseConnection.getInstance();
+    private final Connection connection = service.getConnection();
+    private Statement statement = null;
+    private final TARDIS plugin;
 
-    public static synchronized TARDISDatabase getInstance() {
-        return instance;
-    }
-    public Connection connection = null;
-    public Statement statement = null;
-
-    public void setConnection(String path) throws Exception {
-        Class.forName("org.sqlite.JDBC");
-        connection = DriverManager.getConnection("jdbc:sqlite:" + path);
-    }
-
-    public Connection getConnection() {
-        return connection;
+    public TARDISSQLiteDatabase(TARDIS plugin) {
+        this.plugin = plugin;
     }
 
     /**
@@ -56,7 +47,7 @@ public class TARDISDatabase {
     public void createTables() {
         try {
             statement = connection.createStatement();
-            String queryTARDIS = "CREATE TABLE IF NOT EXISTS tardis (tardis_id INTEGER PRIMARY KEY NOT NULL, owner TEXT COLLATE NOCASE, chunk TEXT, replaced TEXT DEFAULT '', chest TEXT, companions TEXT, platform TEXT DEFAULT '', chameleon TEXT DEFAULT '', chamele_on INTEGER DEFAULT 0, chameleon_preset TEXT DEFAULT 'NEW', chameleon_demat TEXT DEFAULT 'NEW', chameleon_id INTEGER DEFAULT 35, chameleon_data INTEGER DEFAULT 11, adapti_on INTEGER DEFAULT 0, size TEXT DEFAULT '', save_sign TEXT DEFAULT '', artron_level INTEGER DEFAULT 0, creeper TEXT DEFAULT '', handbrake_on INTEGER DEFAULT 1, tardis_init INTEGER DEFAULT 0, middle_id INTEGER, middle_data INTEGER, condenser TEXT DEFAULT '', scanner TEXT DEFAULT '', farm TEXT DEFAULT '', stable TEXT DEFAULT '', recharging INTEGER DEFAULT 0, hidden INTEGER DEFAULT 0, lastuse INTEGER DEFAULT (strftime('%s', 'now')), iso_on INTEGER DEFAULT 0, beacon TEXT DEFAULT '', eps TEXT DEFAULT '', rail TEXT DEFAULT '', village TEXT DEFAULT '')";
+            String queryTARDIS = "CREATE TABLE IF NOT EXISTS tardis (tardis_id INTEGER PRIMARY KEY NOT NULL, owner TEXT COLLATE NOCASE, chunk TEXT, tips INTEGER DEFAULT '-1', replaced TEXT DEFAULT '', companions TEXT, platform TEXT DEFAULT '', chameleon TEXT DEFAULT '', chamele_on INTEGER DEFAULT 0, chameleon_preset TEXT DEFAULT 'NEW', chameleon_demat TEXT DEFAULT 'NEW', chameleon_id INTEGER DEFAULT 35, chameleon_data INTEGER DEFAULT 11, adapti_on INTEGER DEFAULT 0, size TEXT DEFAULT '', save_sign TEXT DEFAULT '', artron_level INTEGER DEFAULT 0, creeper TEXT DEFAULT '', handbrake_on INTEGER DEFAULT 1, tardis_init INTEGER DEFAULT 0, middle_id INTEGER, middle_data INTEGER, condenser TEXT DEFAULT '', scanner TEXT DEFAULT '', farm TEXT DEFAULT '', stable TEXT DEFAULT '', recharging INTEGER DEFAULT 0, hidden INTEGER DEFAULT 0, lastuse INTEGER DEFAULT (strftime('%s', 'now')), iso_on INTEGER DEFAULT 0, beacon TEXT DEFAULT '', eps TEXT DEFAULT '', rail TEXT DEFAULT '', village TEXT DEFAULT '')";
             statement.executeUpdate(queryTARDIS);
             String queryTravellers = "CREATE TABLE IF NOT EXISTS travellers (traveller_id INTEGER PRIMARY KEY NOT NULL, tardis_id INTEGER, player TEXT COLLATE NOCASE)";
             statement.executeUpdate(queryTravellers);
@@ -105,7 +96,7 @@ public class TARDISDatabase {
             String dropLevers = "DROP TABLE IF EXISTS levers";
             statement.executeUpdate(dropLevers);
             // update tables
-            TARDISDatabaseUpdater dbu = new TARDISDatabaseUpdater(statement);
+            TARDISSQLiteDatabaseUpdater dbu = new TARDISSQLiteDatabaseUpdater(plugin, statement);
             dbu.updateTables();
 
             // change RAISED preset to SWAMP
@@ -115,25 +106,15 @@ public class TARDISDatabase {
             statement.executeUpdate(queryRaisedDemat);
 
         } catch (SQLException e) {
-            TARDIS.plugin.console.sendMessage(TARDIS.plugin.pluginName + "Create table error: " + e);
+            plugin.console.sendMessage(TARDIS.plugin.pluginName + "SQLite create table error: " + e);
         } finally {
             try {
                 if (statement != null) {
                     statement.close();
                 }
             } catch (SQLException e) {
-                TARDIS.plugin.console.sendMessage(TARDIS.plugin.pluginName + "Close statement error: " + e);
+                plugin.console.sendMessage(TARDIS.plugin.pluginName + "SQLite close statement error: " + e);
             }
         }
-    }
-
-    /**
-     *
-     * @return an exception
-     * @throws CloneNotSupportedException
-     */
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException("Clone is not allowed.");
     }
 }

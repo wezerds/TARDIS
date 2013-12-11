@@ -32,7 +32,7 @@ import me.eccentric_nz.TARDIS.TARDIS;
  */
 public class ResultSetPlayerPrefs {
 
-    private final TARDISDatabase service = TARDISDatabase.getInstance();
+    private final TARDISDatabaseConnection service = TARDISDatabaseConnection.getInstance();
     private final Connection connection = service.getConnection();
     private final TARDIS plugin;
     private final HashMap<String, Object> where;
@@ -108,7 +108,11 @@ public class ResultSetPlayerPrefs {
             if (rs.next()) {
                 this.pp_id = rs.getInt("pp_id");
                 this.player = rs.getString("player");
+<<<<<<< HEAD
                 this.key = rs.getString("key");
+=======
+                this.key = (plugin.getConfig().getString("database").equals("sqlite")) ? rs.getString("key") : rs.getString("key_item");
+>>>>>>> refs/remotes/origin/2.7
                 this.SFX_on = rs.getBoolean("sfx_on");
                 this.platform_on = rs.getBoolean("platform_on");
                 this.quotes_on = rs.getBoolean("quotes_on");
@@ -126,7 +130,7 @@ public class ResultSetPlayerPrefs {
                 this.EPS_on = rs.getBoolean("eps_on");
                 // if empty use default
                 String message = rs.getString("eps_message");
-                if (message.isEmpty()) {
+                if (rs.wasNull() || message.isEmpty()) {
                     this.EPS_message = "This is Emergency Programme One. I have died. I'm sure I will regenerate soon, but just in case. I have engaged the TARDIS autonomous circuit, and we are returning to my Home location or a recharge point - which ever is closest!";
                 } else {
                     this.EPS_message = rs.getString("eps_message");

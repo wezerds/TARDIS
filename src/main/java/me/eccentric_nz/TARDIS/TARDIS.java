@@ -26,7 +26,7 @@ import java.util.Properties;
 import java.util.Set;
 import me.eccentric_nz.TARDIS.ARS.TARDISARSListener;
 import me.eccentric_nz.TARDIS.builders.TARDISBuilderInner;
-import me.eccentric_nz.TARDIS.builders.TARDISBuilderPreset;
+import me.eccentric_nz.TARDIS.builders.TARDISPresetBuilderFactory;
 import me.eccentric_nz.TARDIS.builders.TARDISSpace;
 import me.eccentric_nz.TARDIS.chameleon.TARDISChameleonListener;
 import me.eccentric_nz.TARDIS.chameleon.TARDISChameleonPreset;
@@ -50,14 +50,18 @@ import me.eccentric_nz.TARDIS.commands.TARDISTextureTabComplete;
 import me.eccentric_nz.TARDIS.commands.TARDISTravelCommands;
 import me.eccentric_nz.TARDIS.commands.TARDISTravelTabComplete;
 import me.eccentric_nz.TARDIS.commands.admin.TARDISAdminTabComplete;
+import me.eccentric_nz.TARDIS.commands.admin.TARDISGiveCommand;
+import me.eccentric_nz.TARDIS.commands.admin.TARDISGiveTabComplete;
 import me.eccentric_nz.TARDIS.commands.preferences.TARDISPrefsTabComplete;
 import me.eccentric_nz.TARDIS.commands.tardis.TARDISTabComplete;
 import me.eccentric_nz.TARDIS.database.QueryFactory;
 import me.eccentric_nz.TARDIS.database.TARDISControlsConverter;
-import me.eccentric_nz.TARDIS.database.TARDISDatabase;
+import me.eccentric_nz.TARDIS.database.TARDISDatabaseConnection;
 import me.eccentric_nz.TARDIS.database.TARDISLocationsConverter;
+import me.eccentric_nz.TARDIS.database.TARDISMySQLDatabase;
+import me.eccentric_nz.TARDIS.database.TARDISSQLiteDatabase;
 import me.eccentric_nz.TARDIS.destroyers.TARDISDestroyerInner;
-import me.eccentric_nz.TARDIS.destroyers.TARDISDestroyerPreset;
+import me.eccentric_nz.TARDIS.destroyers.TARDISPresetDestroyerFactory;
 import me.eccentric_nz.TARDIS.files.TARDISBlockLoader;
 import me.eccentric_nz.TARDIS.files.TARDISConfiguration;
 import me.eccentric_nz.TARDIS.files.TARDISMakeRoomCSV;
@@ -119,7 +123,9 @@ import me.eccentric_nz.TARDIS.utility.Version;
 import me.eccentric_nz.TARDIS.travel.TARDISArea;
 import me.eccentric_nz.TARDIS.utility.TARDISCreeperChecker;
 import me.eccentric_nz.TARDIS.utility.TARDISFactionsChecker;
-import me.eccentric_nz.TARDIS.utility.TARDISItemRecipes;
+import me.eccentric_nz.TARDIS.recipes.TARDISShapedRecipe;
+import me.eccentric_nz.TARDIS.recipes.TARDISShapelessRecipe;
+//import me.eccentric_nz.TARDIS.recipes.TARDISFurnaceRecipe;
 import me.eccentric_nz.TARDIS.utility.TARDISMultiverseInventoriesChecker;
 import me.eccentric_nz.TARDIS.utility.TARDISSounds;
 import me.eccentric_nz.TARDIS.utility.TARDISTownyChecker;
@@ -155,7 +161,7 @@ public class TARDIS extends JavaPlugin {
 
     public static TARDIS plugin;
     private static final ArrayList<String> quotes = new ArrayList<String>();
-    TARDISDatabase service = TARDISDatabase.getInstance();
+    TARDISDatabaseConnection service = TARDISDatabaseConnection.getInstance();
     public TARDISMakeTardisCSV tardisCSV = new TARDISMakeTardisCSV(this);
     public TARDISMakeRoomCSV roomCSV = new TARDISMakeRoomCSV(this);
     public PluginDescriptionFile pdfFile;
@@ -206,9 +212,9 @@ public class TARDIS extends JavaPlugin {
     public TARDISCommands tardisCommand;
     public TARDISAdminCommands tardisAdminCommand;
     public TARDISBuilderInner builderI = new TARDISBuilderInner(this);
-    public TARDISBuilderPreset builderP = new TARDISBuilderPreset(this);
+    public TARDISPresetBuilderFactory builderP = new TARDISPresetBuilderFactory(this);
     public TARDISDestroyerInner destroyerI = new TARDISDestroyerInner(this);
-    public TARDISDestroyerPreset destroyerP = new TARDISDestroyerPreset(this);
+    public TARDISPresetDestroyerFactory destroyerP = new TARDISPresetDestroyerFactory(this);
     public TARDISStainedGlassLookup lookup = new TARDISStainedGlassLookup();
     public TARDISArea ta = new TARDISArea(this);
     public TARDISWorldGuardUtils wgutils;
@@ -268,11 +274,12 @@ public class TARDIS extends JavaPlugin {
     public boolean myspawn = false;
     public HashMap<String, HashMap<String, Integer>> roomBlockCounts = new HashMap<String, HashMap<String, Integer>>();
     public String tp;
-    public FileConfiguration achivement_config;
-    private FileConfiguration artron_config;
-    private FileConfiguration blocks_config;
-    private FileConfiguration rooms_config;
-    private FileConfiguration tag_config;
+    public FileConfiguration achievementConfig;
+    private FileConfiguration artronConfig;
+    private FileConfiguration blocksConfig;
+    private FileConfiguration roomsConfig;
+    private FileConfiguration tagConfig;
+    private FileConfiguration recipesConfig;
     public TARDISButtonListener buttonListener;
     public TARDISDoorListener doorListener;
     public TARDISChameleonPreset presets;
@@ -281,6 +288,9 @@ public class TARDIS extends JavaPlugin {
     private Calendar beforecal;
     private Calendar aftercal;
     private boolean hasVersion = false;
+    public TARDISShapedRecipe figura;
+    public TARDISShapelessRecipe incomposita;
+    //public TARDISFurnaceRecipe fornacis;
 
     @Override
     public void onEnable() {
@@ -339,13 +349,10 @@ public class TARDIS extends JavaPlugin {
             // copy maps
             checkMaps();
             // register recipes
-            TARDISItemRecipes r = new TARDISItemRecipes(this);
-            r.locator();
-            r.locatorCircuit();
-            r.materialisationCircuit();
-            r.sonic();
-            r.stattenheim();
-            r.stattenheimCircuit();
+            figura = new TARDISShapedRecipe(this);
+            figura.addShapedRecipes();
+            incomposita = new TARDISShapelessRecipe(this);
+            incomposita.addShapelessRecipes();
 
             presets = new TARDISChameleonPreset();
             presets.makePresets();
@@ -373,10 +380,18 @@ public class TARDIS extends JavaPlugin {
      * Sets up the database.
      */
     private void loadDatabase() {
+        String dbtype = getConfig().getString("database");
         try {
-            String path = getDataFolder() + File.separator + "TARDIS.db";
-            service.setConnection(path);
-            service.createTables();
+            if (dbtype.equals("sqlite")) {
+                String path = getDataFolder() + File.separator + "TARDIS.db";
+                service.setConnection(path);
+                TARDISSQLiteDatabase sqlite = new TARDISSQLiteDatabase(this);
+                sqlite.createTables();
+            } else {
+                service.setConnection();
+                TARDISMySQLDatabase mysql = new TARDISMySQLDatabase(this);
+                mysql.createTables();
+            }
         } catch (Exception e) {
             console.sendMessage(pluginName + "Connection and Tables Error: " + e);
         }
@@ -397,24 +412,27 @@ public class TARDIS extends JavaPlugin {
      * Loads the custom config files.
      */
     private void loadCustomConfigs() {
+        //TODO - change file copy method - just send the file name and process it there?
         tardisCSV.copy(getDataFolder() + File.separator + "achievements.yml", getResource("achievements.yml"));
         tardisCSV.copy(getDataFolder() + File.separator + "artron.yml", getResource("artron.yml"));
         tardisCSV.copy(getDataFolder() + File.separator + "blocks.yml", getResource("blocks.yml"));
         tardisCSV.copy(getDataFolder() + File.separator + "rooms.yml", getResource("rooms.yml"));
         tardisCSV.copy(getDataFolder() + File.separator + "tag.yml", getResource("tag.yml"));
-        this.achivement_config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "achievements.yml"));
-        if (this.achivement_config.getString("travel.message").equals("Life of the party!")) {
-            this.achivement_config.set("travel.message", "There and back again!");
+        tardisCSV.copy(getDataFolder() + File.separator + "recipes.yml", getResource("recipes.yml"));
+        this.achievementConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "achievements.yml"));
+        if (this.achievementConfig.getString("travel.message").equals("Life of the party!")) {
+            this.achievementConfig.set("travel.message", "There and back again!");
             try {
-                this.achivement_config.save(getDataFolder() + File.separator + "achievements.yml");
+                this.achievementConfig.save(getDataFolder() + File.separator + "achievements.yml");
             } catch (IOException io) {
                 debug("Could not save achievements.yml " + io);
             }
         }
-        this.artron_config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "artron.yml"));
-        this.blocks_config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "blocks.yml"));
-        this.rooms_config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "rooms.yml"));
-        this.tag_config = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "tag.yml"));
+        this.artronConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "artron.yml"));
+        this.blocksConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "blocks.yml"));
+        this.roomsConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "rooms.yml"));
+        this.tagConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "tag.yml"));
+        this.recipesConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "recipes.yml"));
     }
 
     /**
@@ -490,15 +508,17 @@ public class TARDIS extends JavaPlugin {
     private void loadCommands() {
         tardisCommand = new TARDISCommands(this);
         getCommand("tardis").setExecutor(tardisCommand);
-        getCommand("tardis").setTabCompleter(new TARDISTabComplete(plugin));
+        getCommand("tardis").setTabCompleter(new TARDISTabComplete(this));
         tardisAdminCommand = new TARDISAdminCommands(this);
         getCommand("tardisadmin").setExecutor(tardisAdminCommand);
-        getCommand("tardisadmin").setTabCompleter(new TARDISAdminTabComplete(plugin));
+        getCommand("tardisadmin").setTabCompleter(new TARDISAdminTabComplete(this));
         getCommand("tardisarea").setExecutor(new TARDISAreaCommands(this));
         getCommand("tardisarea").setTabCompleter(new TARDISAreaTabComplete());
         getCommand("tardisbind").setExecutor(new TARDISBindCommands(this));
         getCommand("tardisbind").setTabCompleter(new TARDISBindTabComplete());
         getCommand("tardisbook").setExecutor(new TARDISBookCommands(this));
+        getCommand("tardisgive").setExecutor(new TARDISGiveCommand(this));
+        getCommand("tardisgive").setTabCompleter(new TARDISGiveTabComplete());
         getCommand("tardisgravity").setExecutor(new TARDISGravityCommands(this));
         getCommand("tardisgravity").setTabCompleter(new TARDISGravityTabComplete());
         getCommand("tardisprefs").setExecutor(new TARDISPrefsCommands(this));
@@ -509,7 +529,7 @@ public class TARDIS extends JavaPlugin {
         getCommand("tardistexture").setExecutor(new TARDISTextureCommands(this));
         getCommand("tardistexture").setTabCompleter(new TARDISTextureTabComplete());
         getCommand("tardistravel").setExecutor(new TARDISTravelCommands(this));
-        getCommand("tardistravel").setTabCompleter(new TARDISTravelTabComplete(plugin));
+        getCommand("tardistravel").setTabCompleter(new TARDISTravelTabComplete(this));
     }
 
     /**
@@ -536,7 +556,7 @@ public class TARDIS extends JavaPlugin {
                 console.sendMessage(pluginName + "Created books directory.");
             }
         }
-        Set<String> booknames = achivement_config.getKeys(false);
+        Set<String> booknames = achievementConfig.getKeys(false);
         for (String b : booknames) {
             tardisCSV.copy(getDataFolder() + File.separator + "books" + File.separator + b + ".txt", getResource(b + ".txt"));
         }
@@ -544,8 +564,7 @@ public class TARDIS extends JavaPlugin {
 
     /**
      * Starts a repeating tasks that plays TARDIS sound effects to players while
-     * they are inside the TARDIS. Requires the Spout plugin to be installed on
-     * the server.
+     * they are inside the TARDIS.
      */
     private void startSound() {
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
@@ -760,7 +779,7 @@ public class TARDIS extends JavaPlugin {
             String map3 = "map_1965.dat";
             console.sendMessage(pluginName + ChatColor.RED + "Could not find TARDIS map files, some recipes will not work!");
             console.sendMessage(pluginName + "Copying map files to the TARDIS folder...");
-            TARDISMakeTardisCSV copier = new TARDISMakeTardisCSV(plugin);
+            TARDISMakeTardisCSV copier = new TARDISMakeTardisCSV(this);
             copier.copy(getDataFolder() + File.separator + map, getResource(map));
             copier.copy(getDataFolder() + File.separator + map2, getResource(map2));
             copier.copy(getDataFolder() + File.separator + map3, getResource(map3));
@@ -832,23 +851,27 @@ public class TARDIS extends JavaPlugin {
     }
 
     public FileConfiguration getAchivementConfig() {
-        return achivement_config;
+        return achievementConfig;
     }
 
     public FileConfiguration getArtronConfig() {
-        return artron_config;
+        return artronConfig;
     }
 
     public FileConfiguration getBlocksConfig() {
-        return blocks_config;
+        return blocksConfig;
     }
 
     public FileConfiguration getRoomsConfig() {
-        return rooms_config;
+        return roomsConfig;
     }
 
     public FileConfiguration getTagConfig() {
-        return tag_config;
+        return tagConfig;
+    }
+
+    public FileConfiguration getRecipesConfig() {
+        return recipesConfig;
     }
 
     public Calendar getBeforeCal() {

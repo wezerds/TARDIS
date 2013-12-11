@@ -53,6 +53,7 @@ public class TARDISAdminCommands implements CommandExecutor {
         firstsStr.add("chunks");
         firstsStr.add("config");
         firstsStr.add("custom_schematic_seed");
+        firstsStr.add("database");
         firstsStr.add("decharge");
         firstsStr.add("default_world_name");
         firstsStr.add("delete");
@@ -185,6 +186,14 @@ public class TARDISAdminCommands implements CommandExecutor {
                     sender.sendMessage(plugin.pluginName + "Too few command arguments!");
                     return false;
                 }
+                if (first.equals("database")) {
+                    String dbtype = args[1].toLowerCase(Locale.ENGLISH);
+                    if (!dbtype.equals("mysql") && !dbtype.equals("sqlite")) {
+                        sender.sendMessage(plugin.pluginName + "TARDIS database type must be one of 'mysql' or 'sqlite'!");
+                        return true;
+                    }
+                    plugin.getConfig().set("database", dbtype);
+                }
                 if (first.equals("make_preset")) {
                     return new TARDISMakePresetCommand(plugin).scanBlocks(sender, args);
                 }
@@ -213,8 +222,8 @@ public class TARDISAdminCommands implements CommandExecutor {
                     return new TARDISDefaultWorldNameCommand(plugin).setName(sender, args);
                 }
                 if (first.equals("difficulty")) {
-                    if (!args[1].equalsIgnoreCase("easy") && !args[1].equalsIgnoreCase("normal") && !args[1].equalsIgnoreCase("hard")) {
-                        sender.sendMessage(plugin.pluginName + ChatColor.RED + "Difficulty must be easy, normal or hard!");
+                    if (!args[1].equalsIgnoreCase("easy") && !args[1].equalsIgnoreCase("hard")) {
+                        sender.sendMessage(plugin.pluginName + ChatColor.RED + "Difficulty must be easy or hard!");
                         return true;
                     }
                     plugin.getConfig().set("difficulty", args[1].toLowerCase(Locale.ENGLISH));

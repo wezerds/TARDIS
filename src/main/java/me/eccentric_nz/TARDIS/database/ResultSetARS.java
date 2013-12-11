@@ -37,7 +37,7 @@ import me.eccentric_nz.TARDIS.TARDIS;
  */
 public class ResultSetARS {
 
-    private final TARDISDatabase service = TARDISDatabase.getInstance();
+    private final TARDISDatabaseConnection service = TARDISDatabaseConnection.getInstance();
     private final Connection connection = service.getConnection();
     private final TARDIS plugin;
     private final HashMap<String, Object> where;
@@ -106,6 +106,9 @@ public class ResultSetARS {
                     this.south = rs.getInt("ars_z_south");
                     this.layer = rs.getInt("ars_y_layer");
                     this.json = rs.getString("json");
+                    if (rs.wasNull()) {
+                        this.json = "";
+                    }
                 }
             } else {
                 return false;

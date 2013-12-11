@@ -50,8 +50,13 @@ public class TARDISDeleteCommand {
         if (sender instanceof Player) {
             Player player = (Player) sender;
             if (player.getName().equals(args[1])) {
-                sender.sendMessage(plugin.pluginName + "To delete your own records, please disconnect and use the console.");
-                return true;
+                HashMap<String, Object> where = new HashMap<String, Object>();
+                where.put("player", player.getName());
+                ResultSetTravellers rst = new ResultSetTravellers(plugin, where, false);
+                if (rst.resultSet()) {
+                    sender.sendMessage(plugin.pluginName + "You cannot be in your TARDIS when you delete it!");
+                    return true;
+                }
             }
         }
         HashMap<String, Object> where = new HashMap<String, Object>();
@@ -59,6 +64,7 @@ public class TARDISDeleteCommand {
         ResultSetTardis rs = new ResultSetTardis(plugin, where, "", false);
         if (rs.resultSet()) {
             int id = rs.getTardis_id();
+            int tips = rs.getTIPS();
             TARDISConstants.SCHEMATIC schm = rs.getSchematic();
             String chunkLoc = rs.getChunk();
             String[] cdata = chunkLoc.split(":");
@@ -112,7 +118,7 @@ public class TARDISDeleteCommand {
                     plugin.debug("Could not delete world <" + name + ">");
                 }
             } else {
-                plugin.destroyerI.destroyInner(schm, id, cw, restore, args[1]);
+                plugin.destroyerI.destroyInner(schm, id, cw, restore, args[1], tips);
             }
             if (!rs.isHidden()) {
                 plugin.destroyerP.destroyPreset(bb_loc, d, id, false, false, false, null);
