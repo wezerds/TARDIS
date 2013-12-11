@@ -108,11 +108,7 @@ public class ResultSetPlayerPrefs {
             if (rs.next()) {
                 this.pp_id = rs.getInt("pp_id");
                 this.player = rs.getString("player");
-<<<<<<< HEAD
                 this.key = rs.getString("key");
-=======
-                this.key = (plugin.getConfig().getString("database").equals("sqlite")) ? rs.getString("key") : rs.getString("key_item");
->>>>>>> refs/remotes/origin/2.7
                 this.SFX_on = rs.getBoolean("sfx_on");
                 this.platform_on = rs.getBoolean("platform_on");
                 this.quotes_on = rs.getBoolean("quotes_on");
