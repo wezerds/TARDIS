@@ -158,8 +158,6 @@ public class TARDISBuilderInner {
         resetx = gsl[1];
         startz = gsl[2];
         resetz = gsl[3];
-        x = gsl[4];
-        z = gsl[5];
         boolean own_world = plugin.getConfig().getBoolean("create_worlds");
         Location wg1 = new Location(world, startx, starty, startz);
         Location wg2 = new Location(world, startx + (w - 1), starty + (h - 1), startz + (l - 1));
@@ -181,10 +179,10 @@ public class TARDISBuilderInner {
                 for (row = 0; row < w; row++) {
                     for (col = 0; col < l; col++) {
                         plugin.utils.setBlock(world, startx, starty, startz, 0, (byte) 0);
-                        startx += x;
+                        startx += 1;
                     }
                     startx = resetx;
-                    startz += z;
+                    startz += 1;
                 }
                 startz = resetz;
                 starty += 1;
@@ -520,10 +518,10 @@ public class TARDISBuilderInner {
                             plugin.utils.setBlock(world, startx, starty, startz, id, data);
                         }
                     }
-                    startx += x;
+                    startx += 1;
                 }
                 startx = resetx;
-                startz += z;
+                startz += 1;
             }
             startz = resetz;
             starty += 1;
