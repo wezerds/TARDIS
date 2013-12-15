@@ -413,7 +413,6 @@ public class TARDIS extends JavaPlugin {
         tardisCSV.copy(getDataFolder() + File.separator + "blocks.yml", getResource("blocks.yml"));
         tardisCSV.copy(getDataFolder() + File.separator + "rooms.yml", getResource("rooms.yml"));
         tardisCSV.copy(getDataFolder() + File.separator + "tag.yml", getResource("tag.yml"));
-        tardisCSV.copy(getDataFolder() + File.separator + "recipes.yml", getResource("recipes.yml"));
         this.achievementConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "achievements.yml"));
         if (this.achievementConfig.getString("travel.message").equals("Life of the party!")) {
             this.achievementConfig.set("travel.message", "There and back again!");
@@ -427,7 +426,6 @@ public class TARDIS extends JavaPlugin {
         this.blocksConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "blocks.yml"));
         this.roomsConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "rooms.yml"));
         this.tagConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "tag.yml"));
-        this.recipesConfig = YamlConfiguration.loadConfiguration(new File(getDataFolder(), "recipes.yml"));
     }
 
     /**
