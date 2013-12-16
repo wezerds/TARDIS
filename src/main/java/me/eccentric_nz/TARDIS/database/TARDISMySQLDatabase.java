@@ -127,6 +127,12 @@ public class TARDISMySQLDatabase {
             String t_countQuery = "CREATE TABLE IF NOT EXISTS t_count (t_id int(11) NOT NULL AUTO_INCREMENT, player varchar(32) DEFAULT '', count int(3) DEFAULT '0', PRIMARY KEY (t_id)) DEFAULT CHARSET=utf8 COLLATE utf8_general_ci";
             statement.executeUpdate(t_countQuery);
 
+            // fix player_prefs
+            String updateKeyField = "ALTER TABLE `player_prefs` CHANGE `key_item` `key_item` VARCHAR( 32 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'STICK';";
+            statement.executeUpdate(updateKeyField);
+            String updateKeyItem = "UPDATE player_prefs SET `key_item` = 'STICK' WHERE `key_item` = '0'";
+            statement.executeUpdate(updateKeyItem);
+
         } catch (SQLException e) {
             plugin.console.sendMessage(TARDIS.plugin.pluginName + "MySQL create table error: " + e);
         } finally {
