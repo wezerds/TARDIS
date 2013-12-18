@@ -119,6 +119,7 @@ public class ResultSetTardis {
         }
         String query = "SELECT * FROM tardis" + wheres + thelimit;
         try {
+            service.testConnection(connection);
             statement = connection.prepareStatement(query);
             if (where != null) {
                 int s = 1;

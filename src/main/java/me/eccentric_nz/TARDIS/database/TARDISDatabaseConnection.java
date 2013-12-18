@@ -20,6 +20,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import me.eccentric_nz.TARDIS.TARDIS;
 
 /**
@@ -34,12 +36,17 @@ import me.eccentric_nz.TARDIS.TARDIS;
 public class TARDISDatabaseConnection {
 
     private static final TARDISDatabaseConnection instance = new TARDISDatabaseConnection();
+    private boolean isMySQL;
 
     public static synchronized TARDISDatabaseConnection getInstance() {
         return instance;
     }
     public Connection connection = null;
     public Statement statement = null;
+
+    public void setIsMySQL(boolean isMySQL) {
+        this.isMySQL = isMySQL;
+    }
 
     public void setConnection(String path) throws Exception {
         Class.forName("org.sqlite.JDBC");
@@ -74,5 +81,26 @@ public class TARDISDatabaseConnection {
     @Override
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException("Clone is not allowed.");
+    }
+
+    /**
+     * Test the database connection
+     *
+     * @param connection
+     * @throws java.sql.SQLException
+     */
+    public void testConnection(Connection connection) throws SQLException {
+        if (isMySQL) {
+            try {
+                statement = connection.createStatement();
+                statement.executeQuery("SELECT 1");
+            } catch (SQLException e) {
+                try {
+                    this.setConnection();
+                } catch (Exception ex) {
+                    TARDIS.plugin.debug("Could not re-connect to database!");
+                }
+            }
+        }
     }
 }
