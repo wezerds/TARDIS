@@ -107,8 +107,6 @@ public class TARDISDestroyerInner {
         int starty = (below) ? (14 + h) : (63 + h);
         startz = gsl[2];
         resetz = gsl[3];
-        x = gsl[4];
-        z = gsl[5];
         for (level = 0; level < h; level++) {
             for (row = 0; row < width; row++) {
                 for (col = 0; col < l; col++) {
@@ -139,10 +137,10 @@ public class TARDISDestroyerInner {
                             plugin.utils.setBlock(w, startx, starty, startz, i, (byte) 0);
                         }
                     }
-                    startx += x;
+                    startx += 1;
                 }
                 startx = resetx;
-                startz += z;
+                startz += 1;
             }
             startz = resetz;
             starty -= 1;
