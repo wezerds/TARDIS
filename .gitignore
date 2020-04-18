@@ -21,3 +21,9 @@ CVS
 /movies/
 /psd/
 /sounds/
+/.idea/
+/OTG_Files/
+
+# Jekyll Files
+.sass-cache/
+_site/

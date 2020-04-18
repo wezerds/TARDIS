@@ -1,0 +1,230 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>TARDIS: Planet configuration options</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="description" content="Minecraft data values lookup tables with filtering and other neat features."/>
+    <script src="javascripts/jquery.js"></script>
+    <script src="javascripts/index.js"></script>
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-53340539-1', 'auto');
+  ga('send', 'pageview');
+    </script>
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <h1>TARDIS</h1>
+        <p>A Spigot / Paper plugin for all Doctor Who fans &mdash; create and use a TARDIS! It&rsquo;s bigger on the
+            inside!</p>
+        <p class="view"><a href="https://github.com/eccentricdevotion/TARDIS">View the Project on GitHub <small>eccentricdevotion/TARDIS</small></a>
+        </p>
+        <ul>
+            <li><a href="/TARDIS/">Back <strong>home</strong></a></li>
+            <li><a href="site-map.html"><strong>Index</strong> File</a></li>
+        </ul>
+    </header>
+    <section>
+        <h1>Planet configuration options</h1>
+        <p>These are the plugin planet configuration options (found in <em>planets.yml</em>).</p>
+        <p>Worlds are added and removed automatically when the plugin is enabled &mdash; it will find newly added worlds, and remove worlds that no longer exist.</p>
+        <p>You should rarely need to edit this section, as worlds can be included or excluded using the <code>/tardisadmin include [world]</code> and <code>/tardisadmin exclude [world]</code> commands.</p>
+        <style type="text/css">
+			table, table code { font-size:85%; }
+			td { vertical-align:top; }
+			td.noborder { border-bottom: none; }
+			tr.coption { background-color: #eee; }
+		</style>
+        <table>
+            <tr>
+                <th>Option</th>
+                <th>Type</th>
+                <th>Default Value</th>
+            </tr>
+            <tr class="coption">
+                <td class="noborder"><code>switch_resource_packs</code></td>
+                <td class="noborder">boolean</td>
+                <td class="noborder"><code>false</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">To make the Whovian worlds look a little different than a regular world, TARDIS can set a small (~80KB) resource pack when you switch worlds (you must enable server resource packs in the Minecraft client). The resource pack changes the colour of the sky, clouds, water, lava and fog &mdash; you will need to install <a href="http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1272953">Optifine</a></td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder"><code>set_pack_on_join</code></td>
+                <td class="noborder">boolean</td>
+                <td class="noborder"><code>true</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">If players join the server in a world managed by TARDIS, setting this to <code>true</code> will switch the resource pack for them</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder"><code>default_resource_pack</code></td>
+                <td class="noborder">string</td>
+                <td class="noborder"><code><a href="https://www.dropbox.com/s/utka3zxmer7f19g/Default.zip?dl=1">https://www.dropbox.com/s/utka3zxmer7f19g/Default.zip?dl=1</a></code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">This is just an empty resource pack (954 bytes). It is needed to revert back to the default (or other installed) resource pack colours. You can either host your own, or use the one provided. Worlds not listed in the <code>planets</code> section will use this</td>
+            </tr>
+            <tr class="coption">
+                <td colspan="3"><code>planets:</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">This is a list of worlds on your server. If you want to use the world resource pack switching feature for other server worlds, you can add them here. Use the <code>TARDIS_TimeVortex</code> entry as an example.</td>
+            </tr>
+            <tr>
+                <td colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;<code>[planet name]:</code></td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>enabled</code></td>
+                <td class="noborder">boolean</td>
+                <td class="noborder"><code>false</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">Whether this world should be loaded and managed by TARDIS</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>time_travel</code></td>
+                <td class="noborder">boolean</td>
+                <td class="noborder"><code>false</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">Whether this world can be travelled to using the TARDIS</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>resource_pack</code></td>
+                <td class="noborder">string</td>
+                <td class="noborder"><code>Default</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">This is where you specify the URL to the resource pack you want to switch to when entering the world. Host your own, or use the one provided</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>gamemode</code></td>
+                <td class="noborder">string</td>
+                <td class="noborder"><code>SURVIVAL</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">The game mode that this world should use. It should be uppercase and one of: SURVIVAL, CREATIVE, ADVENTURE, SPECTATOR</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>world_type</code></td>
+                <td class="noborder">string</td>
+                <td class="noborder"><code>NORMAL</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">The type of world that is generated. Should be uppercase, and one of: NORMAL, BUFFET, FLAT</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>environment</code></td>
+                <td class="noborder">string</td>
+                <td class="noborder"><code>NORMAL</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">The environment of the world that is generated. Should be uppercase, and one of: NORMAL, THE_END, NETHER</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>generator</code></td>
+                <td class="noborder">string</td>
+                <td class="noborder"><code>DEFAULT</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">The name of the generator for the world. Should be the name of the plugin that is used or DEFAULT</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>game_rules</code></td>
+                <td class="noborder">boolean list</td>
+                <td class="noborder">&mdash;</td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">A list of game rules that should be applied to the world &mdash; such as: doWeatherCycle, doDaylightCycle &mdash; values must be true or false. See <a href="https://minecraft.gamepedia.com/Commands/gamerule" target="_blank">https://minecraft.gamepedia.com/Commands/gamerule</a></td>
+            </tr>
+        </table>
+        <p>The following options are specific to the listed world:</p>
+        <table>
+            <tr>
+                <td colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;<code>Skaro:</code></td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>acid</code></td>
+                <td class="noborder">boolean</td>
+                <td class="noborder"><code>true</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">Whether all the water in the world is acid (and harms the player)</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>acid_damage</code></td>
+                <td class="noborder">integer</td>
+                <td class="noborder"><code>5</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">The amount of damage a player takes when in acid water</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>acid_potions</code></td>
+                <td class="noborder">string list</td>
+                <td class="noborder"><code>- WEAKNESS<br>
+                    - POISON </code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">Optional list of potion effects to give the player when they are in acid water. You can add any potion types from the list here: <a href="https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/browse/src/main/java/org/bukkit/potion/PotionType.java" target="_blank">SPIGOT PotionType.java</a>. Set to <code>[]</code> to remove potion effects</td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>rust</code></td>
+                <td class="noborder">boolean</td>
+                <td class="noborder"><code>true</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">Whether rust is enabled (not actually used yet)</td>
+            </tr>
+            <tr>
+                <td colspan="3">&nbsp;&nbsp;&nbsp;&nbsp;<code>TARDIS_TimeVortex / TARDIS_Zero_Room:</code></td>
+            </tr>
+            <tr class="coption">
+                <td class="noborder">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<code>void</code></td>
+                <td class="noborder">boolean</td>
+                <td class="noborder"><code>true</code></td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td colspan="2">Identifies this as a void world &mdash; Do NOT change...</td>
+            </tr>
+        </table>
+        <p><a href="configuration.html">Back to main configuration page</a></p>
+</section>
+</div>
+<footer>
+    <p>Project maintained by <a href="https://github.com/eccentricdevotion">eccentricdevotion</a></p>
+    <p>Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+</footer>
+<!--[if !IE]>
+<script>fixScale(document);</script><![endif]-->
+</body>
+</html>
